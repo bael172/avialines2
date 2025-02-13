@@ -25,14 +25,14 @@ const Plane = sequelize.define('plane',
         serial:{type:DataTypes.STRING, unique:true}, //серийный номер производителя
         type:{type:DataTypes.STRING}, //Boeing, Airbus
         name:{type:DataTypes.STRING, unique:true}, //Starfish, Jet370, VH-420,
-        seats_number:{type:DataTypes.INTEGER,allowNull:false},
         classes:{type:DataTypes.STRING,defaultValue:"econom"},
         airline:{type:DataTypes.STRING}, //Qatar, Turkish, Russian
+        seats_number:{type:DataTypes.INTEGER,allowNull:false},
         entries_number:{type:DataTypes.INTEGER,allowNull:false},
         crew_member_number:{type:DataTypes.INTEGER},
-        laggage_capacity:{type:DataTypes.INTEGER},
+        luggage_capacity:{type:DataTypes.INTEGER},
         fueltank_capacity:{type:DataTypes.INTEGER},
-        current_fuel_level:{type:DataTypes.INTEGER},
+        current_fuel_level:{type:DataTypes.INTEGER}, //в процентах
         status:{type:DataTypes.STRING}
     })
 

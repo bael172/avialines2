@@ -3,76 +3,109 @@ const {Op} = require("sequelize")
 const ApiError = require("../apiError")
 class Samolet{
     async add(req,res,next){
-        const {id,serial,type,name,seats_number,classes,airline,
-            crew_member_number, luggage_capacity,
+        const {id,serial,pfp,type,name,classes,airline,seats_number,
+            entries_number, crew_member_number, luggage_capacity,
             fueltank_capacity, current_fuel_level, status
         } = req.body
+        if(!id || !serial || !name || !seats_number || !entries_number){
+            return next(ApiError.badRequest("Введите необходимые поля: id, serial, name, seats_number, entries_number"))
+        }
         const id_exist = await Plane.findOne({where:{id}})
         const serial_exist = await Plane.findOne({where:{serial}})
         if(id_exist || serial_exist){res.status(600).send("Самолёт с таким id существует")}
         try{
             const plane = await Plane.create({
-                serial, id, type, name, seats_number, classes, airline, crew_member_number,
-                luggage_capacity, fueltank_capacity, current_fuel_level, status
+                id, serial, pfp, type, name, classes, airline, seats_number, entries_number,
+                crew_member_number, luggage_capacity, fueltank_capacity, current_fuel_level, status
             })
-            res.json(plane)
+            return res.json(plane)
         }
         catch(error){
-            res.next(ApiError.internal(error))
+            return next(ApiError.internal(error))
         }
     } 
     async update_due_id(req,res,next){
-        const {id, serial, type, name, seats_number, classes, airline,
-            crew_member_number, luggage_capacity, fueltank_capacity,
-            current_fuel_level, status
+        const {id,serial,pfp,type,name,classes,airline,seats_number,
+            entries_number, crew_member_number, luggage_capacity,
+            fueltank_capacity, current_fuel_level, status
         } = req.body
-        const due_id = await Plane.findOne({where:{id:req.params.id}})
+        const due_id = await Plane.findByPk(req.params.id)
         if(!due_id) res.send("Самолёт с id=",req.params.id," не найден")
-        await due_id.update({id,serial,type,name,seats_number,classes,airline,
-           crew_member_number, luggage_capacity, fueltank_capacity,
-           current_fuel_level, status
-        })
-        const result = await Plane.findOne({where:req.params.id})
-        res.json(result)
+        try{
+            await due_id.update({
+                id,serial,pfp,type,name,classes,airline,seats_number,
+                entries_number, crew_member_number, luggage_capacity,
+                fueltank_capacity, current_fuel_level, status
+            })
+        }
+        catch(error){
+            return next(ApiError.internal(error))
+        }
+        const result = await Plane.findOne({where:{id:req.params.id}})
+        return res.json(result)
     }
     async update_due_serial(req,res,next){
-        const {id, serial, type, name, seats_number, classes, airline,
-            crew_member_number, luggage_capacity, fueltank_capacity,
-            current_fuel_level, status
+        const {id,serial,pfp,type,name,classes,airline,seats_number,
+            entries_number, crew_member_number, luggage_capacity,
+            fueltank_capacity, current_fuel_level, status
         } = req.body
-        const due_serial = await Plane.findOne({where:{serial:req.params.serial}})
-        if(!due_serial) res.send("Самолёт с серийником=",req.params.serial," не найден")
-        await due_serial.update({id,serial,type,name,seats_number,classes,airline,
-           crew_member_number, luggage_capacity, fueltank_capacity,
-           current_fuel_level, status
-        })
-        const result = await Plane.findOne({where:req.params.serial})
-        res.json(result)
+        const due_id = await Plane.findOne({where:{serial:req.params.serial}})
+        if(!due_id) res.send("Самолёт с id=",req.params.id," не найден")
+        try{
+            await due_id.update({
+                id,serial,pfp,type,name,classes,airline,seats_number,
+                entries_number, crew_member_number, luggage_capacity,
+                fueltank_capacity, current_fuel_level, status
+            })
+        }
+        catch(error){
+            return next(ApiError.internal(error))
+        }
+        const result = await Plane.findOne({where:{serial:req.params.serial}})
+        return res.json(result)
     }
     async get_due_id(req,res,next){
-        const result = await Plane.findOne({where:{id:req.params.id}})
-        if(!result) res.send("Самолёт с id=",req.params.id," не найден")
-        res.json(result)
+        const id = req.params.id
+        const result = await Plane.findByPk(id)
+        if(!result) res.send("Самолёт с id=",id," не найден")
+        return res.json(result)
     }
     async get_due_serial(req,res,next){
-        const result = await Plane.findOne({where:{serial:req.params.serial}})
-        if(!result) res.send("Самолёт с serial=",req.params.serial," не найден")
-        res.json(result)
+        const serial = req.params.serial
+        const result = await Plane.findOne({where:{serial}})
+        if(!result) res.send("Самолёт с serial=",serial," не найден")
+        return res.json(result)
     }
     async get_due_name(req,res,next){
-        const result = await Plane.findOne({where:{name:req.params.name}})
-        if(!result) res.send("Самолёт с name=",req.params.name," не найден")
-        res.json(result)
+        const name = req.params.name
+        const result = await Plane.findOne({where:{name}})
+        if(!result) res.send("Самолёт с name=",name," не найден")
+        return res.json(result)
     }
-    async get_due_query_AND(req,res,next){
-        const result = await Plane.findAll({where:{[Op.and]:[{type:req.query.type},{airline:req.query.airline}]}})
-        if(!result) res.status(600).send("Ничего не найдено")
-        res.json(result)
+    async get_due_query_typeANDclasses(req,res,next){
+        const type = req.params.type
+        const classes = req.params.classes
+        try{
+            const result = await Plane.findAll({where:{[Op.and]:[{type},{classes}]}})
+            if(!result) res.status(600).send("Ничего не найдено")
+            return res.json(result)
+        }
+        catch(error){
+            return next(ApiError.internal(error))
+        }
     }
-    async get_due_query_OR(req,res,next){
-        const result = await Plane.findAll({where:{[Op.or]:[{type:req.query.type},{airline:req.query.airline}]}})
-        if(!result) res.status(600).send("Ничего не найдено")
-            res.json(result)
+    async get_due_query_typeORnameORclasses(req,res,next){
+        const type = req.params.type
+        const name = req.params.name
+        const classes = req.params.classes
+        try{
+            const result = await Plane.findAll({where:{[Op.or]:[{type},{name},{classes}]}})
+            if(!result) res.status(600).send("Ничего не найдено")
+            return res.json(result)
+        }
+        catch(error){
+            return next(ApiError.internal(error))
+        }
     }
     async get_all(req,res,next){
         const all = await Plane.findAll()
@@ -87,7 +120,7 @@ class Samolet{
             else res.send("Самолёт с id=",req.params.id," не найден")
         }
         catch(error){
-            res.next(ApiError.internal(error))
+            return next(ApiError.internal(error))
         }
     }
 }
