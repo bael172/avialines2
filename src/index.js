@@ -5,6 +5,7 @@ import UserStore from './store/userStore'
 import UserRequest from './store/userRequest'
 import './index.css';
 import Registration from './Registration';
+import PostPlane from './addPlane'
 export const userContext = createContext(null)
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -15,6 +16,7 @@ root.render(
       store: new UserRequest()
     }}>
       <Registration></Registration>
+      <PostPlane></PostPlane>
     </userContext.Provider>
   </React.StrictMode>
 );
