@@ -1,19 +1,66 @@
-form{
+html{
+    background-color: #0e2c53;
+    color:white;
+}
+form#form_post_plane{
     position:relative;
     top:25%;
     margin:0 auto;
     display:flex;
-    flex-flow:column nowrap;
-    gap:0 30px;
+    flex-flow:column wrap;
+    gap:1em 0;
 }
-form label{
+#form_post_plane label{
     font-size:larger;
-    margin-bottom:1em;
     width:50vw;
 }
-form input{
+#form_post_plane .classes{
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+}
+#form_post_plane .classes>label>input{
+    display: inline;
+    width:30px;
+}
+#form_post_plane .classes>label{
+    display: inline;
+}
+#form_post_plane .classes *{
+    align-items: center;
+    font-size:large;
+
+}
+#form_post_plane input{
+    margin-top:1em;
     height:2rem;
     width:inherit;
     padding:5px;
     border-radius:10px;
+}
+form input:hover{
+    box-shadow:black 0px 0px;
+}
+#form_post_plane .half{
+    display:flex;
+    justify-content: space-around;
+}
+#form_post_plane .half button{
+    border:0;
+    width:30%;
+    height:3rem;
+    color:white;
+    border-radius: 10px;
+    font-size:larger;
+
+    /*для выравнивания текста по середине*/
+    display:flex;
+    align-items: center;
+    justify-content: center;
+}
+#form_post_plane .half .submit{
+    background-color: rgb(54, 124, 54);
+}
+#form_post_plane .half .reset{
+    background-color: rgb(161, 35, 35)
 }

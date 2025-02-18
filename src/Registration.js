@@ -37,7 +37,7 @@ const App = observer(()=>{
   }
   return (
     <div className="App">
-        <form onSubmit={addUser} method='post' id='form1'>
+        <form onSubmit={addUser} method='post' id='reg'>
           <div>Серия и номер паспорта</div>
           <div class="between">
             
