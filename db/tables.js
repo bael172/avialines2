@@ -23,7 +23,7 @@ const Plane = sequelize.define('plane',
         id:{type:DataTypes.INTEGER,primaryKey:true}, //бортовой номер | номер гос.регистрации | идентификационный номер
         pfp:{type:DataTypes.TEXT},
         serial:{type:DataTypes.STRING, unique:true}, //серийный номер производителя
-        type:{type:DataTypes.STRING}, //Boeing, Airbus
+        type:{type:DataTypes.STRING}, //грузовой, пассажирский
         name:{type:DataTypes.STRING, unique:true}, //Starfish, Jet370, VH-420,
         classes:{type:DataTypes.STRING,defaultValue:"econom"},
         airline:{type:DataTypes.STRING}, //Qatar, Turkish, Russian

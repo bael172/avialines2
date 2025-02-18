@@ -108,8 +108,14 @@ class Samolet{
         }
     }
     async get_all(req,res,next){
-        const all = await Plane.findAll()
-        res.json(all)
+        try{
+            const all = await Plane.findAll()
+            res.json(all)
+        }
+        catch(error){
+            return next(ApiError.internal('Внутрення ошибка',error))
+        }
+
     }
     async delete_due_id(req,res,next){
         try{
