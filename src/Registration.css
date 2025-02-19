@@ -54,24 +54,51 @@ form#reg{
 #reg .between>.seria+.nomer{
   width:50%;
 }
-#reg .submit{
+#reg .buttons{
   display:flex;
   justify-content: start;
-  gap:0 40px;
+  align-items: baseline;
+  gap:0px 30px;
 }
-#reg .submit *{
-  width:50%;
-}
-#reg .submit .submit_1+.submit_2{
+#reg .buttons *{
+  flex-grow:1;
   border-radius: 5px;
   color:white;
   background-color:green;
   font-size:medium;
   padding:10px 20px;
 }
+#reg .submit, #input_submit{
+  /*background-color: rgb(13, 75, 13);*/
+  background-image:linear-gradient(rgb(27, 201, 5),rgb(1, 56, 1));
+}
+#reg .submit:active,#input_submit:active{
+  background-image:linear-gradient(rgb(1, 56, 1),rgb(27, 201, 5));
+}
+#reg .reset{
+  background-image:linear-gradient(red,rgb(73, 0, 0));
+}
+#reg .reset:active{
+  background-image:linear-gradient(rgb(73, 0, 0),red);
+}
+#reg button:hover,#input_submit:hover{
+  transform:scale(1.1);
+  transition:all(0.5s);
+  cursor:pointer;
+}
+
+#reg .submit:hover,#input_submit:hover{
+  background-color: rgb(19, 138, 19);
+}
+#reg .reset:hover{
+  background-color: rgb(238, 29, 29);
+}
 
 .App-link {
   color: #61dafb;
+}
+#reg input:hover{
+  box-shadow: 0px 0px 5px 5px rgb(104, 121, 11);
 }
 
 @keyframes App-logo-spin {

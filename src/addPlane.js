@@ -41,7 +41,7 @@ const App = observer(()=>{
         <div className="App">
             <form onSubmit={add} method="post" id="form_post_plane">
             <label>Бортовой номер (номер гос.регистрации/ID самолёта)
-                <input type="number" id='plane_id' value={plane_id}
+                <input type="text" id='plane_id' value={plane_id}
                 onChange={(e)=>{setPlaneId(e.target.value)}} required></input>
             </label>
             <label>Тип самолёта
@@ -66,17 +66,18 @@ const App = observer(()=>{
                 onChange={(e)=>{setSeatsNumber(e.target.value)}} required></input>
             </label>
             <label class="classes">Классы
-                <label><input type="checkbox" id='econom' value='Эконом' onChange={(e)=>{setClasses(+e.target.value)}}></input>Эконом</label>
-                <label><input type="checkbox" id='business'  value='Бизнес' onChange={(e)=>{setClasses(+e.target.value)}}></input>Бизнес</label>
-                <label><input type="checkbox" id='vip'  value='VIP' onChange={(e)=>setClasses(+e.target.value)}></input>VIP</label>
+                <label><input type="checkbox" id='econom' placeholder='Эконом' value={classes} onSelect={(e)=>setClasses(e.target.placeholder)}></input>Эконом</label>
+                <label><input type="checkbox" id='business' placeholder='Бизнес' value={classes} onSelect={(e)=>setClasses(e.target.placeholder)}></input>Бизнес</label>
+                <label><input type="checkbox" id='vip' placeholder='VIP' value={classes} onSelect={(e)=>setClasses(e.target.placeholder)}></input>VIP</label>
+                <p>{classes}</p>
             </label>
             <label>Авиалинии
-                <input type="text" id='avialines' value={avialines}
+                <input type="text" id='airlines' value={avialines}
                 onChange={(e)=>{setAvialines(e.target.value)}}></input>
             </label>
             <label>Кол-во входов
-                <input type="number" id='plane_entries' value={entries_number}
-                onChange={(e)=>{setEntriesNumber(e.target.value)}}required></input>
+                <input type="number" id='entries_number' value={entries_number}
+                onChange={(e)=>{setEntriesNumber(e.target.value)}} required></input>
             </label>
             <label>Ёмкость багажного отсека (в литрах)
                 <input type="text" id='luggage_capacity' value={luggage_capacity}
@@ -87,7 +88,7 @@ const App = observer(()=>{
                 onChange={(e)=>{setFueltankCapacity(e.target.value)}}></input>
             </label>
             <label>Текущий уровень топлива (в литрах)
-                <input type="number" id='current_fuel_lvl' value={current_fuel_lvl}
+                <input type="number" id='current_fuel_level' value={current_fuel_lvl}
                 onChange={(e)=>{setCurrentFuelLevel(e.target.value)}}></input>
             </label>
             <label>Кол-во членов экипажа
@@ -99,7 +100,7 @@ const App = observer(()=>{
                 onChange={(e)=>{setStatus(e.target.value)}}></input>
             </label>
             <div class="half">
-                <button type="submit" class="submit" formAction={add}>Отправить</button>
+                <button type="submit" class="submit">Отправить</button>
                 <button type="reset" class="reset">Стереть</button>
             </div>
             </form>

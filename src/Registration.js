@@ -128,9 +128,10 @@ const App = observer(()=>{
               value={passwordAgain}
               onChange={e=>setPasswordAgain(e.target.value)}></input>
           
-          <div class="submit">
-            <input type="submit" class="submit_1" formAction={addUser}/*onClick={addUser}*/></input>
-            <button type="submit" class="submit_2">Отправить форму 2</button>
+          <div class="buttons">
+            <input type="submit" class="submit" id="input_submit" formAction={addUser}/*onClick={addUser}*/></input>
+            <button type="submit" class="submit">Отправить форму 2</button>
+            <button type="reset" class="reset">Стереть</button>
           </div>
           
         </form>
