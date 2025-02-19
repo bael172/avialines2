@@ -20,7 +20,7 @@ const User = sequelize.define('user',
 
 const Plane = sequelize.define('plane',
     {
-        id:{type:DataTypes.INTEGER,primaryKey:true}, //бортовой номер | номер гос.регистрации | идентификационный номер
+        id:{type:DataTypes.TEXT,primaryKey:true}, //бортовой номер | номер гос.регистрации | идентификационный номер
         pfp:{type:DataTypes.TEXT},
         serial:{type:DataTypes.STRING, unique:true}, //серийный номер производителя
         type:{type:DataTypes.STRING}, //грузовой, пассажирский
