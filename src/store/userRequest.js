@@ -5,8 +5,8 @@ export default class UserRequest{
         this.userRequest=[]
         makeAutoObservable(this)
     }
-    setUserRequest(userRequest){
-        this.userRequest=userRequest
+    setUserRequest(request){
+        this.userRequest=request
     }
     getUserRequest(){
         return this.userRequest
