@@ -2,12 +2,13 @@ import './Registration.css';
 import {observer} from 'mobx-react-lite'
 import React, {useState, useEffect, useContext} from 'react'
 
-import {userContext} from "./index";
+import {Context} from "./index";
 import { registration } from './http/user_queries'; //Обращение к axios запросам
 //import Passport_data from './user_data'
+
 const App = observer(()=>{
-  const User = useContext(userContext) //в объект записывается value из <userContext.Provider/>
-  const {UserRequest} = useContext(userContext) //в объект записывается value из <userContext.Provider/>
+ //в объект записывается value из <userContext.Provider/>//в объект записывается value из <userContext.Provider/>
+  const context = useContext(Context) 
   const [seria,setSeria] = useState('')
   const [nomer,setNomer] = useState('')
   const [surname,setSurname] = useState('')
@@ -26,8 +27,8 @@ const App = observer(()=>{
     e.preventDefault();
     try{
         registration(passport,surname,name,lastname,birthday,email,phone,login,password,passwordAgain,position,role).then(response => {//порядок передачи аргументов должен быть таким же как и в функции registration user_queries.js 
-          User.user.setUser(response)
-          User.user.setIsAuth(true)
+          context.user.setUser(response)
+          context.user.setIsAuth(true)
           console.log(response)
         }) 
     }

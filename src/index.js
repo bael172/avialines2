@@ -7,19 +7,19 @@ import './index.css';
 import Registration from './Registration';
 import PostPlane from './addPlane'
 import ShowPlane from './IShowPlanes'
-export const userContext = createContext(null)
+export const Context = createContext(null)
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <userContext.Provider value={{
+    <Context.Provider value={{
       user: new UserStore(),
       store: new UserRequest()
     }}>
       <Registration></Registration>
       <PostPlane></PostPlane>
       <ShowPlane></ShowPlane>
-    </userContext.Provider>
+    </Context.Provider>
   </React.StrictMode>
 );
 

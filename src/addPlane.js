@@ -1,11 +1,11 @@
 import './addPlane.css'
 import React, { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
-import { userContext } from './index.js'
+import { Context } from './index.js'
 import { add_plane } from './http/plane_queries.js'
 
 const App = observer(() => {
-    const context = useContext(userContext)
+    const context = useContext(Context)
 
     const [plane_id, setPlaneId] = useState('')
     const [plane_type, setType] = useState('')
@@ -25,26 +25,27 @@ const App = observer(() => {
         e.preventDefault()
         try {
             let selectedValues = '';
-            for (const option in checkboxes) { //перебор по индексам
+            for (let option in checkboxes) { //перебор по индексам
                 if (checkboxes[option]) //обращение к значению элемента массива по индексу
-                    selectedValues += option += ', '
+                    selectedValues +=  option += ', '
             }
             let classes = selectedValues.slice(0, -2) //удаляем последнюю запятую и пробел
+            console.log("classes: ",classes)
             const response = await add_plane(plane_id, serial, plane_type, photo, plane_name, classes, avialines,
                 seats_number, entries_number, crew_member_count, luggage_capacity,
                 fueltank_capacity, current_fuel_lvl, status)
-            context.store.setUserRequest(response)
+            context.store.setRequest(response)
             console.log(response)
         }
         catch (error) {
-            console.error('status:', error.status, ' message', error.message)
+            //console.error('status:', error.status, ' message', error.message)
             console.log(error)
         }
     }
     const [checkboxes, setCheckboxes] = useState({
-        option1: false,
-        option2: false,
-        option3: false
+        econom: false,
+        business: false,
+        vip: false
     })
     const handleChange = (event) => {
         const { name, checked } = event.target //помещаем в переменные из переданного события имя и выбранность элемента target
@@ -82,9 +83,9 @@ const App = observer(() => {
                         onChange={(e) => { setSeatsNumber(e.target.value) }} required></input>
                 </label>
                 <label class="classes">Классы
-                    <label><input type="checkbox" id='econom' name='option1' value='Option 1 Value' onChange={handleChange} checked={checkboxes.option1}></input>Эконом</label>
-                    <label><input type="checkbox" id='business' name='option2' value='Option 2 Value' onChange={handleChange} checked={checkboxes.option2}></input>Бизнес</label>
-                    <label><input type="checkbox" id='vip' name='option3' value='Option 3 Value' onChange={handleChange} checked={checkboxes.option3}></input>VIP</label>
+                    <label><input type="checkbox" id='econom' name='econom' value='econom' onChange={handleChange} checked={checkboxes.option1}></input>Эконом</label>
+                    <label><input type="checkbox" id='business' name='business' value='business' onChange={handleChange} checked={checkboxes.option2}></input>Бизнес</label>
+                    <label><input type="checkbox" id='vip' name='vip' value='vip' onChange={handleChange} checked={checkboxes.option3}></input>VIP</label>
                 </label>
                 <label>Авиалинии
                     <input type="text" name="entries_number" id='airlines' value={avialines}

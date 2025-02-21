@@ -1,14 +1,14 @@
 import {makeAutoObservable} from "mobx"
 
-export default class UserRequest{
+export default class Request{
     constructor(){
-        this.userRequest=[]
+        this.Request=[]
         makeAutoObservable(this)
     }
-    setUserRequest(request){
-        this.userRequest=request
+    setRequest(request){
+        this.Request=request
     }
-    getUserRequest(){
-        return this.userRequest
+    getRequest(){
+        return this.Request
     }
 }
