@@ -9,7 +9,6 @@ const App = observer(() => {
 
     const [plane_id, setPlaneId] = useState('')
     const [plane_type, setType] = useState('')
-    const [photo, setPhoto] = useState('')
     const [serial, setSerial] = useState('')
     const [plane_name, setName] = useState('')
     const [seats_number, setSeatsNumber] = useState('')
@@ -21,37 +20,70 @@ const App = observer(() => {
     const [current_fuel_lvl, setCurrentFuelLevel] = useState('')
     const [crew_member_count, setCrewMemberCount] = useState('')
     const [status, setStatus] = useState('')
+
+    const [selectedFile, setSelectedFile] = useState(null)
+    const [images, setImages] = useState([])
+
+    const handleFileChange = (event) =>{
+        setSelectedFile(event.target.files[0])
+    }
+    function checkbox_classes(){
+        let selectedValues = ''
+        for (let option in checkboxes) { //перебор по ключам свойств
+            if (checkboxes[option]) //если значение итерируемого ключа option = true
+                selectedValues +=  labels[option] += ', '
+        }
+        let classes = selectedValues.slice(0, -2) //удаляем последнюю запятую и пробел
+        console.log("classes: ",classes)
+        return selectedValues
+    }
     const handleSubmit = async (e) => {
         e.preventDefault()
-        try {
-            let selectedValues = '';
-            for (let option in checkboxes) { //перебор по индексам
-                if (checkboxes[option]) //обращение к значению элемента массива по индексу
-                    selectedValues +=  option += ', '
+
+            //Cтрока с классами удобства самолёта: econom, bussines и т.д.
+            let classes = checkbox_classes();
+            if(selectedFile){
+                const formData = new FormData();
+                //plane_image должен совпадать с полем upload.single('plane_image') в middleware multer
+                formData.append('plane_image',selectedFile);
             }
-            let classes = selectedValues.slice(0, -2) //удаляем последнюю запятую и пробел
-            console.log("classes: ",classes)
-            const response = await add_plane(plane_id, serial, plane_type, photo, plane_name, classes, avialines,
-                seats_number, entries_number, crew_member_count, luggage_capacity,
-                fueltank_capacity, current_fuel_lvl, status)
+        try {
+            const response = await add_plane(plane_id, serial, plane_type, plane_name, avialines, 
+                classes, seats_number, entries_number, crew_member_count, luggage_capacity,
+                fueltank_capacity, current_fuel_lvl,status,formData)
             context.store.setRequest(response)
             console.log(response)
+            setSelectedFile(null) //clear the selected file
         }
         catch (error) {
-            //console.error('status:', error.status, ' message', error.message)
+            console.error('status:', error.status, ' message', error.message)
             console.log(error)
         }
     }
+    //Значения checked чекбоксов
     const [checkboxes, setCheckboxes] = useState({
-        econom: false,
-        business: false,
-        vip: false
+        option1: false,
+        option2: false,
+        option3: false
     })
+    //Заголовки чекбоксов
+    const [labels, setLabels] = useState({
+        option1: '',
+        option2: '',
+        option3: ''
+    })
+
     const handleChange = (event) => {
-        const { name, checked } = event.target //помещаем в переменные из переданного события имя и выбранность элемента target
+        //деструктуризация объекта event.target
+        //помещаем в переменные name, value, checked значения одноименных ключей объекта event.target
+        const { name, value, checked} = event.target 
         setCheckboxes({
-            ...checkboxes,
-            [name]: checked
+            ...checkboxes, //копируем все свойства из checkboxes
+            [name]: checked //заменяем значение одного из свойств c ключом name
+        })
+        setLabels({
+            ...labels, //копируем все свойства из labels
+            [name]: value //заменяем значение одного из свойств c ключом name
         })
     }
     return (
@@ -70,8 +102,8 @@ const App = observer(() => {
                         onChange={(e) => { setSerial(e.target.value) }} required></input>
                 </label>
                 <label>Фото самолёта
-                    <input type="file" name='plane_photo' accept="image/*" id='plane_photo'
-                        onChange={(e) => { setPhoto(e.target.files[0]) }}></input>
+                    <input type="file" name='plane_image' accept="image/*" id='plane_photo'
+                        onChange={(e) => {handleFileChange(e)}}></input>
                 </label>
                 <div>{JSON.stringify(photo)}</div>
                 <label>Название самолёта
@@ -83,9 +115,9 @@ const App = observer(() => {
                         onChange={(e) => { setSeatsNumber(e.target.value) }} required></input>
                 </label>
                 <label class="classes">Классы
-                    <label><input type="checkbox" id='econom' name='econom' value='econom' onChange={handleChange} checked={checkboxes.option1}></input>Эконом</label>
-                    <label><input type="checkbox" id='business' name='business' value='business' onChange={handleChange} checked={checkboxes.option2}></input>Бизнес</label>
-                    <label><input type="checkbox" id='vip' name='vip' value='vip' onChange={handleChange} checked={checkboxes.option3}></input>VIP</label>
+                    <label><input type="checkbox" id='econom' name='option1' value='econom' onChange={handleChange} checked={checkboxes.option1}></input>Эконом</label>
+                    <label><input type="checkbox" id='business' name='option2' value='business' onChange={handleChange} checked={checkboxes.option2}></input>Бизнес</label>
+                    <label><input type="checkbox" id='vip' name='option3' value='vip' onChange={handleChange} checked={checkboxes.option3}></input>VIP</label>
                 </label>
                 <label>Авиалинии
                     <input type="text" name="entries_number" id='airlines' value={avialines}
