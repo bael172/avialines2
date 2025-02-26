@@ -56,8 +56,8 @@ const Show = observer(() => {
                             <caption>Все самолёты</caption>
                             <thead>
                             <tr>
-                                <th align="center">ID</th>
                                 <th align="center">Фото</th>
+                                <th align="center">ID</th>
                                 <th align="center">Серийный номер</th>
                                 <th align="center">Тип</th>
                                 <th align="center">Наименование</th>
@@ -66,7 +66,7 @@ const Show = observer(() => {
                                 <th align="center">Кол-во сидений</th>
                                 <th align="center">Кол-во входов</th>
                                 <th align="center">Кол-во членов экипажа</th>
-                                <th align="center">Объём багажного отделения (л)</th>
+                                <th align="center">Объём багажного отделения (м3)</th>
                                 <th align="center">Ёмкость топливного бака (л)</th>
                                 <th align="center">Текущий объем топлива (л)</th>
                                 <th align="center">Статус</th>
@@ -76,19 +76,20 @@ const Show = observer(() => {
                             {
                                 store.Request.map((item,index)=>
                                 <tr key={index}>
-                                    <td>{item.id}</td>
                                     <td>{item.pfp}</td>
+                                    <td>{item.id}</td>
                                     <td>{item.serial}</td>
                                     <td>{item.type}</td>
                                     <td>{item.name}</td>
                                     <td>{item.classes}</td>
+                                    <td>{item.airline}</td>
                                     <td>{item.seats_number}</td>
                                     <td>{item.entries_number}</td>
                                     <td>{item.crew_member_number}</td>
                                     <td>{item.luggage_capacity}</td>
                                     <td>{item.fueltank_capacity}</td>
                                     <td>{item.current_fuel_level}</td>
-                                    <td>{item.current_fuel_level}</td>
+                                    <td>{item.status}</td>
                                 </tr>
                             )}
                             </tbody>
