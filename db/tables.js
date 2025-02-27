@@ -21,7 +21,8 @@ const User = sequelize.define('user',
 const Plane = sequelize.define('plane',
     {
         id:{type:DataTypes.TEXT,primaryKey:true}, //бортовой номер | номер гос.регистрации | идентификационный номер
-        pfp:{type:DataTypes.TEXT},
+        filename:{type:DataTypes.STRING},
+        filepath:{type:DataTypes.STRING},
         serial:{type:DataTypes.STRING, unique:true}, //серийный номер производителя
         type:{type:DataTypes.STRING}, //грузовой, пассажирский
         name:{type:DataTypes.STRING, unique:true}, //Starfish, Jet370, VH-420,
@@ -73,7 +74,7 @@ const Point = sequelize.define('point',
 const Flight = sequelize.define('flight',
 {
     flight_number:{type:DataTypes.STRING, primaryKey:true},
-    id_plane:{type:DataTypes.INTEGER, references:{
+    id_plane:{type:DataTypes.TEXT, references:{
         model:'planes',
         key:'id'
     }},

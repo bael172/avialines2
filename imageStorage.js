@@ -1,5 +1,3 @@
-const express = require("express")
-const app = express()
 const multer = require('multer')
 const path = require('path')
 
@@ -24,8 +22,5 @@ const uploadsDir = path.join(__dirname, 'uploads');
 if(!fs.existsSync(uploadsDir)){
     fs.mkdirSync(uploadsDir);
 }
-
-//Делает папку /uploads доступной по URL: uploads
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 module.exports = upload

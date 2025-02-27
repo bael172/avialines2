@@ -3,7 +3,12 @@ const {Op} = require("sequelize")
 const ApiError = require("../apiError")
 class Samolet{
     async add(req,res,next){
-        const {id,serial,pfp,type,name,classes,airline,seats_number,
+        /*
+        if(!req.file){
+            
+        }
+        */
+        const {id,serial,type,name,classes,airline,seats_number,
             entries_number, crew_member_number, luggage_capacity,
             fueltank_capacity, current_fuel_level, status
         } = req.body
@@ -14,11 +19,24 @@ class Samolet{
         const serial_exist = await Plane.findOne({where:{serial}})
         if(id_exist || serial_exist){res.status(600).send("Самолёт с таким id существует")}
         try{
-            const plane = await Plane.create({
-                id, serial, pfp, type, name, classes, airline, seats_number, entries_number,
-                crew_member_number, luggage_capacity, fueltank_capacity, current_fuel_level, status
-            })
-            return res.json(plane)
+            if(req.file){ //Если есть файл заполняем соотв-щие поля
+                const filename = req.file.filename;
+                const filepath = req.file.path;
+
+                const plane = await Plane.create({
+                    id, serial, filename, filepath, type, name, classes, airline, seats_number, entries_number,
+                    crew_member_number, luggage_capacity, fueltank_capacity, current_fuel_level, status
+                })
+                return res.json(plane)
+           }
+           else { //Если нет файла, то пропускаем поля filename, filepath
+                res.status(400).write('No file uploaded')
+                const plane = await Plane.create({
+                    id, serial, type, name, classes, airline, seats_number, entries_number,
+                    crew_member_number, luggage_capacity, fueltank_capacity, current_fuel_level, status
+                })
+                return res.status(200).json(plane)
+           }
         }
         catch(error){
             return next(ApiError.internal(error))
@@ -113,7 +131,7 @@ class Samolet{
             res.json(all)
         }
         catch(error){
-            return next(ApiError.internal('Внутрення ошибка',error))
+            return next(ApiError.internal('Внутренняя ошибка',error))
         }
 
     }

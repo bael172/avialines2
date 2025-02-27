@@ -1,9 +1,13 @@
 const Router = require("express")
 const router = new Router()
 
+const upload = require('../imageStorage')
+
 const plane = require("../queries/plane")
 
-router.post("/add",plane.add)
+//upload.single('image') - Multer Middleware
+//для обработки одного файла с именем image (имя поля name в React)
+router.post("/add",upload.single('plane_image'),plane.add)
 
 router.patch("/update_due_id/:id",plane.update_due_id)
 router.patch("/update_due_serial/:name",plane.update_due_serial)
