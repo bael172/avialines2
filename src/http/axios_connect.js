@@ -2,7 +2,7 @@ import axios from "axios"
 //require('dotenv').config({path:'./env'})
 
 export const $host = axios.create({
-    baseURL:'http://localhost:7000/query/'
+    baseURL:'http://localhost:7000/'
 })
 
 export const $authHost = axios.create({

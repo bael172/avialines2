@@ -1,12 +1,12 @@
 import React, {useContext, useState, useEffect} from "react"
-import {update_planeInfo, showPlanes} from "./http/plane_queries"
+import {update_planeInfo} from "./http/plane_queries"
 import {Context} from "./index"
 
 const Edit = observer = (()=>{
     const store = useContext(Context.store)
 
-    const [id, setNewId] = useState('')
-    const [pfp, setNewPfp] = useState('')
+    const [ParamsId, setId] = useState('')
+    const [BodyId, setNewId] = useState('')
     const [serial, setNewSerial] = useState('')
     const [type, setNewType] = useState('')
     const [name, setNewName] = useState('')
@@ -19,6 +19,7 @@ const Edit = observer = (()=>{
     const [fueltank_capacity, setNewFueltankCapacity] = useState('')
     const [current_fuel_lvl, setNewCurrentFuelLvl] = useState('')
     const [status, setNewStatus] = useState('')
+
     const [checkboxes, setCheckboxes] = useState({
         option1:false,
         option2:false,
@@ -29,33 +30,35 @@ const Edit = observer = (()=>{
         option2:'business',
         option3:'vip'
     })
-    const edit_table = useState(false)
+    const [edit_table,setToggleEdit] = useState(false)
     const [file,setSelectedFile] = useState(null)
 
     const showPlanes = async(e) =>{
         const response = await showPlanes()
         console.log("Результат show_planes = ",response)
         store.setRequest(response)
-        console.log("store= ",store.getRequest())
+        console.log("store.getRequest= ",store.getRequest())
     }
     const handleSubmit = async(e)=>{
         let selectedValues = ''
         for(let option in checkboxes){
-            checkboxes[option]? selectedValues+=labels[option]+', ' : null
+            if(checkboxes[option]) selectedValues+=labels[option]+', '
         }
         selectedValues.slice(0,-2)
         setNewClasses(selectedValues)
         const result = confirm("Вы уверены что хотите изменить строку?")
         if(result){
             try{
-                await update_planeInfo(id,pfp,serial,type,name,classes,airline,
-                    seats_number,entries_number,crew_count,luggage_volume,fueltank_capacity,current_fuel_lvl,status)
-                    .then(console.log(response))
+                const response = await update_planeInfo(BodyId,serial,type,name,classes,airline,
+                    seats_number,entries_number,crew_count,luggage_volume,fueltank_capacity,
+                    current_fuel_lvl,status,file)
+                console.log('axios response=',response)
+                store.setRequest(response)
+                console.log('store.getRequest=',store.getRequest)
             }
             catch(error){
                 console.log(error)
             }
-            
         }
     }
     function handleChange(event){
@@ -69,10 +72,15 @@ const Edit = observer = (()=>{
         const file = event.target.files[0]
         setSelectedFile(file)
     }
+    function toggle_edit(){
+        setToggleEdit(prevToggleEdit => !prevToggleEdit)
+    }
     
     return(
         <div classsName="App">
             <div class="container">
+                <button class="toggle_editTable" onClick={e=>toggle_edit(e)}>{edit_table? 'Режим редактирования':'Режим просмотра'}</button>
+                <br></br>
                 {edit_table?
                     (
                         <table className="show_planes">
@@ -100,12 +108,12 @@ const Edit = observer = (()=>{
                             {store.Request.map((item,index,array)=>
                                 <tr key={index}>
                                     <form onSubmit={handleSubmit}>
-                                        <button type="submit">Изменить</button>
+                                        <button type="submit">Сохранить изменения</button>
                                         <td><input type="file" accept="image/*"onChange={(e)=>handleFileChange(e)}></input></td>
-                                        <td><input type="text" placeholder={item.id} value={id}></input></td>
-                                        <td><input type="text" placeholder={item.serial} value={}></input></td>
-                                        <td><input type="text" placeholder={item.type}></input></td>
-                                        <td><input type="text" placeholder={item.name}></input></td>
+                                        <td><input type="text" placeholder={item.id} value={BodyId} onChange={(e)=>setNewId(e.target.value)}></input></td>
+                                        <td><input type="text" placeholder={item.serial} value={serial} onChange={(e)=>setNewSerial(e.target.value)}></input></td>
+                                        <td><input type="text" placeholder={item.type} value={type} onChange={(e)=>setNewType(e.target.value)}></input></td>
+                                        <td><input type="text" placeholder={item.name} value={name} onChange={(e)=>setNewName(e.target.value)}></input></td>
                                         <td>
                                             <div class="block">
                                                 <input type="checkbox" name="option1" onChange={(e)=>handleChange(e)} checked={checkboxes.option1}>{labels.option1}</input>
@@ -113,14 +121,14 @@ const Edit = observer = (()=>{
                                                 <input type="checkbox" name="option3" onChange={(e)=>handleChange(e)} checked={checkboxes.option3}>{labels.option1}</input>
                                             </div>
                                         </td>
-                                        <td><input type="text" placeholder={item.airline}></input></td>
-                                        <td><input type="number" placeholder={item.seats_number}></input></td>
-                                        <td><input type="number" placeholder={item.entries_number}></input></td>
-                                        <td><input type="number" placeholder={item.crew_member_number}></input></td>
-                                        <td><input type="number" placeholder={item.luggage_capacity}></input></td>
-                                        <td><input type="number" placeholder={item.fueltank_capacity}></input></td>
-                                        <td><input type="number" placeholder={item.current_fuel_level}></input></td>
-                                        <td><input type="text" placeholder={item.status}></input></td>
+                                        <td><input type="text" placeholder={item.airline} value={airline} onChange ={(e)=>setNewAirline(e.target.value)}></input></td>
+                                        <td><input type="number" placeholder={item.seats_number} value={seats_number} onChange ={(e)=>setNewSeatsNumber(e.target.value)}></input></td>
+                                        <td><input type="number" placeholder={item.entries_number} value={entries_number} onChange ={(e)=>setNewEntriesNumber(e.target.value)}></input></td>
+                                        <td><input type="number" placeholder={item.crew_member_number} value={crew_count} onChange ={(e)=>setNewCrewCount(e.target.value)}></input></td>
+                                        <td><input type="number" placeholder={item.luggage_capacity} value={luggage_volume} onChange ={(e)=>setNewLuggageVolume(e.target.value)}></input></td>
+                                        <td><input type="number" placeholder={item.fueltank_capacity} value={fueltank_capacity} onChange ={(e)=>setNewFueltankCapacity(e.target.value)}></input></td>
+                                        <td><input type="number" placeholder={item.current_fuel_level} value={current_fuel_lvl} onChange ={(e)=>setNewCurrentFuelLvl(e.target.value)}></input></td>
+                                        <td><input type="text" placeholder={item.status} value={status} onChange ={(e)=>setNewStatus(e.target.value)}></input></td>
                                     </form>
                                 </tr>
                             )}

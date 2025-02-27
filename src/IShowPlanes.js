@@ -1,14 +1,17 @@
 import './IShowPlanes.css'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState, useRef } from 'react'
 import { observer } from 'mobx-react-lite'
 import { show_planes as get_all } from './http/plane_queries'
+import {$host} from './http/axios_connect'
 import { Context } from './index'
 
 const Show = observer(() => {
+    const {store} = useContext(Context)
+
     const [showList, setShowList] = useState(false)
     const [storage, setStorage] = useState([])
-    const {store} = useContext(Context)
-    const fetch_data = async (e) => {
+
+    const fetch_data = async () => {
         try {
             const response = await get_all();
             console.log("response=",response)
@@ -41,6 +44,26 @@ const Show = observer(() => {
         setShowList(prevShowList => !prevShowList)
     }
     document.body.style.backgroundColor = "#FFFFFF"
+    function TableCell ({item}){
+        const [srcValue, setSrcValue] = useState('')
+        const imgRef = useRef(null)
+        useEffect(()=>{
+            if(imgRef.current){
+                setSrcValue(imgRef.current.getAttribute('src'))
+            }
+        },[item.filename])
+        return (
+            <td className='image'>
+                <img 
+                    ref={imgRef}
+                    id={item.id}
+                    src={`http://localhost:7000/${item.filepath}`}
+                    style={{maxWidth:"200px", height:'auto'}} alt={item.filename}>
+                </img>
+            </td>
+        )
+         // src с item.id = 42380 = function wrap() { return fn.apply(thisArg, arguments); }uploads/plane_image-1740658547896-211837322.jpg
+    }
 
     return (
         <div className="App1" >
@@ -74,9 +97,9 @@ const Show = observer(() => {
                             </thead>
                             <tbody>
                             {
-                                store.Request.map((item,index)=>
+                                store.getRequest().map((item,index)=>
                                 <tr key={index}>
-                                    <td>{item.pfp}</td>
+                                    <TableCell item={item}></TableCell>
                                     <td>{item.id}</td>
                                     <td>{item.serial}</td>
                                     <td>{item.type}</td>

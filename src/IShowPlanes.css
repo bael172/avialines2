@@ -23,6 +23,9 @@ table.show_planes td{
     border:1px solid black;
     padding:20px 30px;
 }
+table.show_planes td.image{
+    padding:0;
+}
 .odd{
     background-color: rgb(119, 119, 214);
 }

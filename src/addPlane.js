@@ -31,7 +31,7 @@ const App = observer(() => {
         let selectedValues = ''
         for (let option in checkboxes) { //перебор по ключам свойств
             if (checkboxes[option]) //если значение итерируемого ключа option = true
-                selectedValues +=  labels[option] += ', '
+                selectedValues +=  labels[option] + ', '
         }
         let classes = selectedValues.slice(0, -2) //удаляем последнюю запятую и пробел
         console.log("classes: ",classes)
@@ -42,21 +42,16 @@ const App = observer(() => {
 
             //Cтрока с классами удобства самолёта: econom, bussines и т.д.
             let classes = checkbox_classes();
-            if(selectedFile){
-                const formData = new FormData();
-                //plane_image должен совпадать с полем upload.single('plane_image') в middleware multer
-                formData.append('plane_image',selectedFile);
-            }
         try {
             const response = await add_plane(plane_id, serial, plane_type, plane_name, avialines, 
                 classes, seats_number, entries_number, crew_member_count, luggage_capacity,
-                fueltank_capacity, current_fuel_lvl,status,formData)
+                fueltank_capacity, current_fuel_lvl, status, selectedFile)
             context.store.setRequest(response)
-            console.log(response)
+            console.log('store.getRequest=',context.store.getRequest())
             setSelectedFile(null) //clear the selected file
         }
         catch (error) {
-            console.error('status:', error.status, ' message', error.message)
+            console.error('status:', error?.response?.status, ' message', error?.message)
             console.log(error)
         }
     }
@@ -105,7 +100,6 @@ const App = observer(() => {
                     <input type="file" name='plane_image' accept="image/*" id='plane_photo'
                         onChange={(e) => {handleFileChange(e)}}></input>
                 </label>
-                <div>{JSON.stringify(photo)}</div>
                 <label>Название самолёта
                     <input type="text" name='plane_name' id='plane_name' value={plane_name}
                         onChange={(e) => { setName(e.target.value) }} required></input>
@@ -127,7 +121,7 @@ const App = observer(() => {
                     <input type="number" name="entries_number" id='entries_number' value={entries_number}
                         onChange={(e) => { setEntriesNumber(e.target.value) }} required></input>
                 </label>
-                <label>Ёмкость багажного отсека (в литрах)
+                <label>Ёмкость багажного отсека (в м3)
                     <input type="text" name="luggage_capacity" id='luggage_capacity' value={luggage_capacity}
                         onChange={(e) => { setLuggageCapacity(e.target.value) }}></input>
                 </label>
