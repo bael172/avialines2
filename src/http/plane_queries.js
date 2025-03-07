@@ -48,29 +48,27 @@ export const show_planes = async()=>{
         throw error
     }
 }
-export const update_planes = async(id, type, serial, name, 
-                airline, classes, seats_count, entries_count, crew_count, 
-                fuel_volume, baggage_volume, current_fuel_volume, status, image)=>{
+export const update_plane = async(ParamsId, image, plane)=>{
     try{
         const formData = new FormData();
         if(image){
             //plane_image должен совпадать с полем upload.single('plane_image') в middleware multer
             formData.append('plane_image',image);
         }
-        formData.append('id',id);
-        formData.append('serial',serial);
-        formData.append('type',type);
-        formData.append('name',name)
-        formData.append('classes',classes);
-        formData.append('airline',airline);
-        formData.append('seats_number',seats_count);
-        formData.append('entries_number',entries_count);
-        formData.append('crew_member_number',crew_count);
-        formData.append('luggage_capacity',baggage_volume);
-        formData.append('fueltank_capacity',fuel_volume);
-        formData.append('current_fuel_level',current_fuel_volume);
-        formData.append('status',status);
-        const response = await $host.patch('/query/plane/update_due_id/'+id,formData,{
+        formData.append('id',plane.BodyId);
+        formData.append('serial',plane.serial);
+        formData.append('type',plane.type);
+        formData.append('name',plane.name)
+        formData.append('classes',plane.classes);
+        formData.append('airline',plane.airline);
+        formData.append('seats_number',plane.seats_count);
+        formData.append('entries_number',plane.entries_count);
+        formData.append('crew_member_number',plane.crew_count);
+        formData.append('luggage_capacity',plane.baggage_volume);
+        formData.append('fueltank_capacity',plane.fuel_volume);
+        formData.append('current_fuel_level',plane.current_fuel_volume);
+        formData.append('status',plane.status);
+        const response = await $host.patch('/query/plane/update_due_id/'+ParamsId,formData,{
             headers:{
                 'Content-Type':'multipart/form-data'
             }

@@ -7,6 +7,7 @@ import './index.css';
 import Registration from './Registration';
 import PostPlane from './addPlane'
 import ShowPlane from './IShowPlanes'
+import EditPlane from './editPlanes'
 export const Context = createContext(null)
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -19,6 +20,7 @@ root.render(
       <Registration></Registration>
       <PostPlane></PostPlane>
       <ShowPlane></ShowPlane>
+      <EditPlane></EditPlane>
     </Context.Provider>
   </React.StrictMode>
 );

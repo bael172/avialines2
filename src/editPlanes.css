@@ -1,0 +1,13 @@
+.App3{
+    min-height:100vh;
+}
+.show_planes{
+    max-width:80vw;
+}
+.container{
+    padding:2%;
+}
+table.show_planes tr>*{
+    padding-inline: 1em;
+    padding-block:0.2em;
+}
