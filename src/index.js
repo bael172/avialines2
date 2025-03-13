@@ -17,6 +17,7 @@ root.render(
       user: new UserStore(),
       store: new UserRequest()
     }}>
+      <PostPlane />
       <EditPlane />
     </Context.Provider>
   </React.StrictMode>

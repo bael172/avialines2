@@ -95,36 +95,36 @@ const Edit = observer(()=>{
     //React Component для отображения строки таблицы для редактирования
     function EditTR({item,index}){
 
-        function handlePlaneChange(value, current_id, name){
+        function handlePlaneChange(value, current_id, key_name){
             if(new_data[current_id]){
-                setNewData((prev)=>({...prev, current_id: {name:value, ...current_id }}))
+                setNewData((prev)=>({...prev, current_id: { key_name:value, ...current_id }}))
             }
         }
 
         return (
-        <tr key={index}>
-            <td><button onClick={() => setParamsId(item.id)} type="submit">Сохранить изменения</button></td>
-            <td><input type="file" accept="image/*" onChange={(e)=>handleFileChange(e)}></input></td>
-            <td><input type="text" placeholder={item.id} onChange={(e)=>handlePlaneChange(e.target.value, item.id, "id")}></input></td>
-            <td><input type="text" placeholder={item.serial} onChange={(e)=>handlePlaneChange(e.target.value, item.id, "serial")}></input></td>
-            <td><input type="text" placeholder={item.type} onChange={(e)=>handlePlaneChange(e.target.value, item.id, "type")}></input></td>
-            <td><input type="text" placeholder={item.name} onChange={(e)=>handlePlaneChange(e.target.value, item.id, "name")}></input></td>
-            <td>
-                <div class="block">
-                    <input type="checkbox" name="option1" onChange={(e)=>handleChange(e)} checked={checkboxes.option1}></input>{labels.option1}
-                    <input type="checkbox" name="option2" onChange={(e)=>handleChange(e)} checked={checkboxes.option2}></input>{labels.option2}
-                    <input type="checkbox" name="option3" onChange={(e)=>handleChange(e)} checked={checkboxes.option3}></input>{labels.option3}
-                </div>
-            </td>
-            <td><input type="text" placeholder={item.airline} onChange={(e)=>handlePlaneChange(e.target.value, item.airline, "airline")}></input></td>
-            <td><input type="number" placeholder={item.seats_number} onChange={(e)=>handlePlaneChange(e.target.value, item.seats_number, "seats_number")}></input></td>
-            <td><input type="number" placeholder={item.entries_number} onChange={(e)=>handlePlaneChange(e.target.value, item.id, "entries_number")}></input></td>
-            <td><input type="number" placeholder={item.crew_member_number} onChange={(e)=>handlePlaneChange(e.target.value, item.id, "crew_member_number")}></input></td>
-            <td><input type="number" placeholder={item.luggage_capacity} onChange={(e)=>handlePlaneChange(e.target.value, item.id, "luggage_capacity")}></input></td>
-            <td><input type="number" placeholder={item.fueltank_capacity} onChange={(e)=>handlePlaneChange(e.target.value, item.id, "fueltank_capacity")}></input></td>
-            <td><input type="number" placeholder={item.current_fuel_level} onChange={(e)=>handlePlaneChange(e.target.value, item.id, "current_fuel_level")}></input></td>
-            <td><input type="text" placeholder={item.status} onChange={(e)=>handlePlaneChange(e.target.value, item.status, "status")}></input></td>
-        </tr>
+            <tr key={index}>
+                <td><button onClick={() => setParamsId(item.id)} type="submit">Сохранить изменения</button></td>
+                <td><input type="file" accept="image/*" onChange={(e)=>handleFileChange(e)}></input></td>
+                <td><input type="text" placeholder={item.id} onChange={(e)=>handlePlaneChange(e.target.value, item.id, "id")}></input></td>
+                <td><input type="text" placeholder={item.serial} onChange={(e)=>handlePlaneChange(e.target.value, item.id, "serial")}></input></td>
+                <td><input type="text" placeholder={item.type} onChange={(e)=>handlePlaneChange(e.target.value, item.id, "type")}></input></td>
+                <td><input type="text" placeholder={item.name} onChange={(e)=>handlePlaneChange(e.target.value, item.id, "name")}></input></td>
+                <td>
+                    <div class="block">
+                        <input type="checkbox" name="option1" onChange={(e)=>handleChange(e)} checked={checkboxes.option1}></input>{labels.option1}
+                        <input type="checkbox" name="option2" onChange={(e)=>handleChange(e)} checked={checkboxes.option2}></input>{labels.option2}
+                        <input type="checkbox" name="option3" onChange={(e)=>handleChange(e)} checked={checkboxes.option3}></input>{labels.option3}
+                    </div>
+                </td>
+                <td><input type="text" placeholder={item.airline} onChange={(e)=>handlePlaneChange(e.target.value, item.airline, "airline")}></input></td>
+                <td><input type="number" placeholder={item.seats_number} onChange={(e)=>handlePlaneChange(e.target.value, item.seats_number, "seats_number")}></input></td>
+                <td><input type="number" placeholder={item.entries_number} onChange={(e)=>handlePlaneChange(e.target.value, item.id, "entries_number")}></input></td>
+                <td><input type="number" placeholder={item.crew_member_number} onChange={(e)=>handlePlaneChange(e.target.value, item.id, "crew_member_number")}></input></td>
+                <td><input type="number" placeholder={item.luggage_capacity} onChange={(e)=>handlePlaneChange(e.target.value, item.id, "luggage_capacity")}></input></td>
+                <td><input type="number" placeholder={item.fueltank_capacity} onChange={(e)=>handlePlaneChange(e.target.value, item.id, "fueltank_capacity")}></input></td>
+                <td><input type="number" placeholder={item.current_fuel_level} onChange={(e)=>handlePlaneChange(e.target.value, item.id, "current_fuel_level")}></input></td>
+                <td><input type="text" placeholder={item.status} onChange={(e)=>handlePlaneChange(e.target.value, item.status, "status")}></input></td>
+            </tr>
         )
     }
 

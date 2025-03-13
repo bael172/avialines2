@@ -55,19 +55,20 @@ export const update_plane = async(ParamsId, image, plane)=>{
             //plane_image должен совпадать с полем upload.single('plane_image') в middleware multer
             formData.append('plane_image',image);
         }
-        formData.append('id',plane.BodyId);
-        formData.append('serial',plane.serial);
-        formData.append('type',plane.type);
-        formData.append('name',plane.name)
-        formData.append('classes',plane.classes);
-        formData.append('airline',plane.airline);
-        formData.append('seats_number',plane.seats_count);
-        formData.append('entries_number',plane.entries_count);
-        formData.append('crew_member_number',plane.crew_count);
-        formData.append('luggage_capacity',plane.baggage_volume);
-        formData.append('fueltank_capacity',plane.fuel_volume);
-        formData.append('current_fuel_level',plane.current_fuel_volume);
-        formData.append('status',plane.status);
+
+        formData.append('id',plane.BodyId || '');
+        formData.append('serial',plane.serial || '');
+        formData.append('type',plane.type || '');
+        formData.append('name',plane.name || '');
+        formData.append('classes',plane.classes || '');
+        formData.append('airline',plane.airline || '');
+        formData.append('seats_number',plane.seats_count || '');
+        formData.append('entries_number',plane.entries_count || '');
+        formData.append('crew_member_number',plane.crew_count || '');
+        formData.append('luggage_capacity',plane.baggage_volume || '');
+        formData.append('fueltank_capacity',plane.fuel_volume || '');
+        formData.append('current_fuel_level',plane.current_fuel_volume || '');
+        formData.append('status',plane.status || '');
         const response = await $host.patch('/query/plane/update_due_id/'+ParamsId,formData,{
             headers:{
                 'Content-Type':'multipart/form-data'
