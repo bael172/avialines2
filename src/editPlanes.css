@@ -1,5 +1,4 @@
 body{
-    background-color: rgb(38, 38, 59);
     color:white;
 }
 .App3{
@@ -14,4 +13,33 @@ body{
 table.show_planes tr>*{
     padding-inline: 1em;
     padding-block:0.2em;
+}
+
+.table-like{
+    display:table;
+    width:10%;
+    border-collapse:collapse;
+    table-layout: fixed;
+}
+.thead-like{
+    display:table-header-group;
+    background-color: rgb(67, 91, 97);
+    font-weight: 800;
+}
+.tbody-like{
+    display:table-row-group;
+}
+.tr-like{
+    display:table-row;
+}
+.tr-like>div{
+    min-width: 100px;
+    max-width:300px;
+    display:table-cell;
+    padding: 4px 6px;
+    border:1px solid black;
+    text-align: center;
+}
+.caption{
+    display:table-cell;
 }
