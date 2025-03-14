@@ -19,7 +19,7 @@ table.show_planes tr>*{
     display:table;
     width:10%;
     border-collapse:collapse;
-    table-layout: fixed;
+    table-layout:initial;
 }
 .thead-like{
     display:table-header-group;
@@ -33,8 +33,6 @@ table.show_planes tr>*{
     display:table-row;
 }
 .tr-like>div{
-    min-width: 100px;
-    max-width:300px;
     display:table-cell;
     padding: 4px 6px;
     border:1px solid black;

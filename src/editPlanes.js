@@ -121,8 +121,7 @@ const Edit = observer(()=>{
         }
 
         return (
-            <form onSubmit={(e,index)=>handleSubmit(e,index)}>
-            <div className="tr-like" key={index}>
+            <form className="tr-like" key={index} onSubmit={(e,index)=>handleSubmit(e,index)} method="post">
                 <div><button onClick={() => setParamsId(item.id)} type="submit">Сохранить изменения</button></div>
                 <div><input type="file" accept="image/*" onChange={(e)=>handleFileChange(e)}></input></div>
                 <div><input type="text" placeholder={item.id} onChange={(e)=>setBodyId(e.target.value)}></input></div>
@@ -144,7 +143,6 @@ const Edit = observer(()=>{
                 <div><input type="number" placeholder={item.fueltank_capacity} onChange={(e)=>setNewFueltankCapacity(e.target.value)}></input></div>
                 <div><input type="number" placeholder={item.current_fuel_level} onChange={(e)=>setNewCurrentFuelLvl(e.target.value)}></input></div>
                 <div><input type="text" placeholder={item.status} onChange={(e)=>setNewStatus(e.target.value)}></input></div>
-            </div>
             </form>
         )
         /*
@@ -234,24 +232,25 @@ const Edit = observer(()=>{
                         </tr>
                         </thead>
                         <tbody>
-                            {store.getRequest().map((item,index,array)=>
+                            {store.Request.map((item,index,array)=>(
                                 <tr key={index}>
-                                    <td></td>
-                                    <td><img src={`http://localhost:7000/${item.filepath}`} min-width="100px" height="auto"/></td>
-                                    <td>{item.id}</td>
-                                    <td>{item.serial}</td>
-                                    <td>{item.type}</td>
-                                    <td>{item.name}</td>
-                                    <td>{item.classes}</td>
-                                    <td>{item.airline}</td>
-                                    <td>{item.seats_number}</td>
-                                    <td>{item.entries_number}</td>
-                                    <td>{item.crew_member_number}</td>
-                                    <td>{item.luggage_capacity}</td>
-                                    <td>{item.fueltank_capacity}</td>
-                                    <td>{item.current_fuel_level}</td>
-                                    <td>{item.status}</td>
+                                <td></td>
+                                <td><img src={`http://localhost:7000/${item.filepath}`} style={{maxWidth:"300px"}} height="auto"/></td>
+                                <td>{item.id}</td>
+                                <td>{item.serial}</td>
+                                <td>{item.type}</td>
+                                <td>{item.name}</td>
+                                <td>{item.classes}</td>
+                                <td>{item.airline}</td>
+                                <td>{item.seats_number}</td>
+                                <td>{item.entries_number}</td>
+                                <td>{item.crew_member_number}</td>
+                                <td>{item.luggage_capacity}</td>
+                                <td>{item.fueltank_capacity}</td>
+                                <td>{item.current_fuel_level}</td>
+                                <td>{item.status}</td>
                                 </tr>
+                            )
                             )}
                         </tbody>
                     </table>

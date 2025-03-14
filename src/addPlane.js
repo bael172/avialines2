@@ -5,7 +5,7 @@ import { Context } from './index.js'
 import { add_plane } from './http/plane_queries.js'
 
 const App = observer(() => {
-    const context = useContext(Context)
+    const {store} = useContext(Context)
 
     const [plane_id, setPlaneId] = useState('')
     const [plane_type, setType] = useState('')
@@ -46,8 +46,8 @@ const App = observer(() => {
             const response = await add_plane(plane_id, serial, plane_type, plane_name, avialines, 
                 classes, seats_number, entries_number, crew_member_count, luggage_capacity,
                 fueltank_capacity, current_fuel_lvl, status, selectedFile)
-            context.store.setRequest(response)
-            console.log('store.getRequest=',context.store.getRequest())
+            store.setRequest(response)
+            console.log('store.getRequest=',store.getRequest())
             setSelectedFile(null) //clear the selected file
         }
         catch (error) {
