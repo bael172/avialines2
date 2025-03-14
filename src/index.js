@@ -8,6 +8,7 @@ import Registration from './Registration';
 import PostPlane from './addPlane'
 import ShowPlane from './IShowPlanes'
 import EditPlane from './editPlanes'
+import App from './App.js'
 export const Context = createContext(null)
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -17,8 +18,7 @@ root.render(
       user: new UserStore(),
       store: new UserRequest()
     }}>
-      <PostPlane />
-      <EditPlane />
+      <App></App>
     </Context.Provider>
   </React.StrictMode>
 );

@@ -77,7 +77,7 @@ const Edit = observer(()=>{
         }
 
         const handleSubmit = async(e,index)=>{
-            e.currentTarget.preventDefault();
+            e.currentTarget.preventDefault(); //currentTarget - элемент к которому прикреплён обработчик (form) target - элемент вызввавший событие (button)
             let selectedValues = '' //строка содержащая классы самолёта
             for(let option in checkboxes){
                 if(checkboxes[option]) selectedValues+=labels[option]+', '
@@ -103,6 +103,7 @@ const Edit = observer(()=>{
                         'current_fuel_level':current_fuel_lvl,
                         'status':status
                     })
+                    console.log('new_data',new_data.toJSON())
                     const response = await update_plane(ParamsId,file,new_data)
                     console.log('axios response=',response)
                     store.setRequest(response)
@@ -121,7 +122,7 @@ const Edit = observer(()=>{
         }
 
         return (
-            <form className="tr-like" key={index} onSubmit={(e,index)=>handleSubmit(e,index)} method="post">
+            <form className="tr-like" key={index} onSubmit={(e,index)=>handleSubmit(e,index)}>
                 <div><button onClick={() => setParamsId(item.id)} type="submit">Сохранить изменения</button></div>
                 <div><input type="file" accept="image/*" onChange={(e)=>handleFileChange(e)}></input></div>
                 <div><input type="text" placeholder={item.id} onChange={(e)=>setBodyId(e.target.value)}></input></div>
