@@ -39,8 +39,8 @@ export const add_plane = async(id,serial,type,name,airline,classes,
     }
 export const show_planes = async()=>{
     try{
-        const {data} = await $host.get('query/plane/get_all')
-        return data
+        const response = await $host.get('query/plane/get_all')
+        return response.data
     }
     catch(error){
         alert("Ошибка axios вывода данных из таблицы planes")
@@ -79,6 +79,18 @@ export const update_plane = async(ParamsId, image, plane)=>{
     }
     catch(error){
         alert("Ошибка axios обновления данных в таблице planes")
+        console.error(error)
+        throw error
+    }
+}
+export const delete_row = async(id)=>{
+    try{
+        const response = await $host.delete('/query/plane/delete_due_id/'+id)
+        localStorage.setItem('info',JSON.stringify(response.data))
+        return response.data
+    }
+    catch(error){
+        alert("Ошибка axios удаления данных в таблице planes")
         console.error(error)
         throw error
     }

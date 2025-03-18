@@ -1,10 +1,11 @@
 import {observer} from 'mobx-react-lite'
 import React, {useContext, useState, useEffect} from "react"
+import {Modal, Button} from 'react-bootstrap'
 import {update_plane, show_planes} from "./http/plane_queries"
 import {Context} from "./index"
 import './editPlanes.css'
 
-const Edit = observer(()=>{
+const EditPlane = observer(()=>{
     const {store} = useContext(Context)
 
     const IShowPlanes = async(e) => {
@@ -12,7 +13,7 @@ const Edit = observer(()=>{
             const response = await show_planes()
             console.log("Результат show_planes = ",response)
             store.setRequest(response)
-            console.log("store.getRequest= ",store.getRequest())
+            console.log("Request(show_planes) = ",store.getRequest())
         }
         catch(e){
             console.error(e)
@@ -63,6 +64,10 @@ const Edit = observer(()=>{
             option3:'vip'
         })
 
+        const [show,setShow] = useState(false)
+        const handleClose = ()=> setShow(false);
+        const handleShow = ()=> setShow(true);
+
         function handleFileChange(event){
             const file = event.target.files[0]
             setSelectedFile(file)
@@ -75,19 +80,44 @@ const Edit = observer(()=>{
                 [name]:checked //option1 : true
             })
         }
-
-        const handleSubmit = async(e,index)=>{
-            e.currentTarget.preventDefault(); //currentTarget - элемент к которому прикреплён обработчик (form) target - элемент вызввавший событие (button)
+        function checkbox(){
+            console.log("привет")
             let selectedValues = '' //строка содержащая классы самолёта
             for(let option in checkboxes){
                 if(checkboxes[option]) selectedValues+=labels[option]+', '
             }
             selectedValues.slice(0,-2)  //убираем последние , 
-            setNewClasses(selectedValues) //присваиваем значение
-            
-            const result = window.confirm("Вы уверены что хотите изменить строку?")
-            if(result){
-                try{
+            return selectedValues
+        }
+        function Confirm_delete(){
+            return(
+                <Modal show={show} onHide={handleClose}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Подтвердите удаление</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <div>Вы собираетесь удалить запись: </div>
+                        <div>ID: {item.id}</div>
+                        <div>Serial: {item.serial}</div>
+                        <div>Name: {item.name}</div>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={handleClose}>
+                            Выйти
+                        </Button>
+                        <Button variant="primary" onClick={handleSubmit}>
+                            Подтвердить
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+            )
+        }
+
+        const handleSubmit = async()=>{
+            setParamsId(item.id);
+             //currentTarget - элемент к которому прикреплён обработчик (form) target - элемент вызввавший событие (button)
+            setNewClasses(checkbox()) //присваиваем значение
+            try{
                     setNewData({
                         'BodyId':BodyId,
                         'serial':serial,
@@ -107,24 +137,24 @@ const Edit = observer(()=>{
                     const response = await update_plane(ParamsId,file,new_data)
                     console.log('axios response=',response)
                     store.setRequest(response)
-                    console.log('store.getRequest=',store.getRequest)
+                    console.log('Request(update_plane) = ',store.getRequest)
                 }
                 catch(error){
                     console.log(error)
                 }
             }
-        }
-
+        /*
         function handlePlaneChange(value, current_id, key_name){
             if(new_data[current_id]){
                 setNewData((prev)=>({...prev, current_id: { key_name:value, ...current_id }}))
             }
         }
+        */
 
         return (
-            <form className="tr-like" key={index} onSubmit={(e,index)=>handleSubmit(e,index)}>
-                <div><button onClick={() => setParamsId(item.id)} type="submit">Сохранить изменения</button></div>
-                <div><input type="file" accept="image/*" onChange={(e)=>handleFileChange(e)}></input></div>
+            <form className="tr-like" key={index}>
+                <div><button onClick={()=>Confirm_delete()}>Сохранить изменения</button></div>
+                <div><input type="file" accept="image/*" onChange={(e)=>handleFileChange(e,item)}></input></div>
                 <div><input type="text" placeholder={item.id} onChange={(e)=>setBodyId(e.target.value)}></input></div>
                 <div><input type="text" placeholder={item.serial} onChange={(e)=>setNewSerial(e.target.value)}></input></div>
                 <div><input type="text" placeholder={item.type} onChange={(e)=>setNewType(e.target.value)}></input></div>
@@ -146,6 +176,7 @@ const Edit = observer(()=>{
                 <div><input type="text" placeholder={item.status} onChange={(e)=>setNewStatus(e.target.value)}></input></div>
             </form>
         )
+    }
         /*
             <tr key={index}>
                 <td><button onClick={() => setParamsId(item.id)} type="submit">Сохранить изменения</button></td>
@@ -171,7 +202,7 @@ const Edit = observer(()=>{
                 <td><input type="text" placeholder={item.status} onChange={(e)=>handlePlaneChange(e.target.value, item.status, "status")}></input></td>
             </tr>
          */
-    }
+    
 
     
     return(
@@ -233,7 +264,7 @@ const Edit = observer(()=>{
                         </tr>
                         </thead>
                         <tbody>
-                            {store.Request.map((item,index,array)=>(
+                            {store.Request.map((item,index,array)=>
                                 <tr key={index}>
                                 <td></td>
                                 <td><img src={`http://localhost:7000/${item.filepath}`} style={{maxWidth:"300px"}} height="auto"/></td>
@@ -251,7 +282,6 @@ const Edit = observer(()=>{
                                 <td>{item.current_fuel_level}</td>
                                 <td>{item.status}</td>
                                 </tr>
-                            )
                             )}
                         </tbody>
                     </table>
@@ -262,4 +292,4 @@ const Edit = observer(()=>{
     )
 })
 
-export default Edit
+export default EditPlane
