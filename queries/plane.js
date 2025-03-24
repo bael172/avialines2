@@ -1,6 +1,14 @@
 const {Plane} = require("../db/tables")
 const {Op} = require("sequelize")
 const ApiError = require("../apiError")
+const crypto = require('crypto')
+function ETag(data){
+    const hash = crypto.createHash('md5').update(data).digest('hex');
+    return `"${hash}"`
+}
+function LastModified(){
+
+}
 class Samolet{
     async add(req,res,next){
         /*
@@ -49,16 +57,34 @@ class Samolet{
         } = req.body
         const due_id = await Plane.findByPk(req.params.id)
         if(!due_id) res.send("Самолёт с id=",req.params.id," не найден")
-        try{
-            await due_id.update({
-                id,serial,pfp,type,name,classes,airline,seats_number,
-                entries_number, crew_member_number, luggage_capacity,
-                fueltank_capacity, current_fuel_level, status
-            })
+        if(req.file){
+            const filename = req.file.filename;
+            const filepath = req.file.path;
+            try{
+                await due_id.update({
+                    filename, filepath, id,serial,pfp,type,name,classes,airline,seats_number,
+                    entries_number, crew_member_number, luggage_capacity,
+                    fueltank_capacity, current_fuel_level, status
+                })
+            }
+            catch(error){
+                return next(ApiError.internal(error))
+            }
         }
-        catch(error){
-            return next(ApiError.internal(error))
-        }
+        else  {
+            try{
+                await due_id.update({
+                    id,serial,pfp,type,name,classes,airline,seats_number,
+                    entries_number, crew_member_number, luggage_capacity,
+                    fueltank_capacity, current_fuel_level, status
+                })
+            }
+            catch(error){
+                return next(ApiError.internal(error))
+            }
+        }           
+
+
         const result = await Plane.findOne({where:{id:req.params.id}})
         return res.json(result)
     }
@@ -126,12 +152,50 @@ class Samolet{
         }
     }
     async get_all(req,res,next){
+        console.log('privet')
         try{
             const all = await Plane.findAll()
+            const data = JSON.stringify(all)
+            const etag = ETag(data)
+            //const lastModified = new Date(all.updatedAt.toUTCSyting()); //Получаем дату из базы данных
+            let lastModifiedDate = null;
+            for (const plane of all) {
+            if (plane.updatedAt) {
+                const currentUpdatedAt = new Date(plane.updatedAt);
+                if (lastModifiedDate===null || currentUpdatedAt > lastModifiedDate) {
+                lastModifiedDate = currentUpdatedAt;
+                }
+            }
+            //!lastModified проверка на falsy значение (undefined,NaN,"",null,false)
+            //!lastModified тоже самое что и lastModified == null
+            //поздняя дата БОЛЬШЕ чем ранняя дата
+            } //Находим самую позднюю дату updatedAt
+            if(lastModifiedDate){
+                const lastModified = lastModifiedDate.toUTCString();
+                res.setHeader('Last-Modified',lastModified)
+            }
+
+            //1 вариант кэширования
+            res.setHeader('Cache-Control','public,max-age=3600')
+            
+            //2 вариант кэширования
+            res.setHeader('ETag',etag);
+
+            //res.setHeader('Cache-Control','no-cache')
+
+            const ifNoneMatch = req.headers['If-None-Match'];
+            const ifModifiedSince = req.headers['If-Modified-Since']
+
+            if(ifNoneMatch === etag){
+                res.status(304).end; //Not Modified
+            }
+            if(ifModifiedSince && new Date(ifModifiedSince) >= lastModifiedDate){
+                return res.status(304).end; //Not Modified
+            }
             res.json(all)
         }
         catch(error){
-            return next(ApiError.internal('Внутренняя ошибка',error))
+            throw error
         }
 
     }
