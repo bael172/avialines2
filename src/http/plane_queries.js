@@ -39,12 +39,13 @@ export const add_plane = async(id,serial,type,name,airline,classes,
     }
 export const show_planes = async()=>{
     try{
+        console.log('show')
         const response = await $host.get('query/plane/get_all')
         return response.data
     }
     catch(error){
+        console.log(error)
         alert("Ошибка axios вывода данных из таблицы planes")
-        console.error(error)
         throw error
     }
 }

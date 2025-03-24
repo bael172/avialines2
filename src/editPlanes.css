@@ -14,6 +14,9 @@ table.show_planes tr>*{
     padding-inline: 1em;
     padding-block:0.2em;
 }
+.container>table{
+    border:2px white solid;
+}
 
 .table-like{
     display:table;

@@ -20,7 +20,7 @@ const EditPlane = observer(()=>{
         }
 
     }
-    useEffect(()=>{IShowPlanes()},[])
+    //useEffect(()=>{IShowPlanes()},[])
 
     const [edit_table,setToggleEdit] = useState(false) //тоггл-элемент редактирование-просмотр таблицы
     const [file,setSelectedFile] = useState(null) //изображение самолёта
@@ -64,9 +64,6 @@ const EditPlane = observer(()=>{
             option3:'vip'
         })
 
-        const [show,setShow] = useState(false)
-        const handleClose = ()=> setShow(false);
-        const handleShow = ()=> setShow(true);
 
         function handleFileChange(event){
             const file = event.target.files[0]
@@ -88,29 +85,6 @@ const EditPlane = observer(()=>{
             }
             selectedValues.slice(0,-2)  //убираем последние , 
             return selectedValues
-        }
-        function Confirm_delete(){
-            return(
-                <Modal show={show} onHide={handleClose}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Подтвердите удаление</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <div>Вы собираетесь удалить запись: </div>
-                        <div>ID: {item.id}</div>
-                        <div>Serial: {item.serial}</div>
-                        <div>Name: {item.name}</div>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="secondary" onClick={handleClose}>
-                            Выйти
-                        </Button>
-                        <Button variant="primary" onClick={handleSubmit}>
-                            Подтвердить
-                        </Button>
-                    </Modal.Footer>
-                </Modal>
-            )
         }
 
         const handleSubmit = async()=>{
@@ -153,7 +127,7 @@ const EditPlane = observer(()=>{
 
         return (
             <form className="tr-like" key={index}>
-                <div><button onClick={()=>Confirm_delete()}>Сохранить изменения</button></div>
+                <div><button onClick={()=>handleSubmit()}>Сохранить изменения</button></div>
                 <div><input type="file" accept="image/*" onChange={(e)=>handleFileChange(e,item)}></input></div>
                 <div><input type="text" placeholder={item.id} onChange={(e)=>setBodyId(e.target.value)}></input></div>
                 <div><input type="text" placeholder={item.serial} onChange={(e)=>setNewSerial(e.target.value)}></input></div>

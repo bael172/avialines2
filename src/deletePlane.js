@@ -1,5 +1,6 @@
 import {observer} from 'mobx-react-lite'
 import React, {useContext, useState, useEffect} from "react"
+import {Modal, Button} from 'react-bootstrap'
 import {delete_row, show_planes} from "./http/plane_queries"
 import {Context} from "./index"
 import './editPlanes.css'
@@ -11,13 +12,38 @@ const DeletePlane = observer(()=>{
     function ShowTR({item,index}){
         const [ParamsId, setParamsId] = useState('')
 
-        const deleteRow = async(event,item)=>{
+        const [show,setShow] = useState(false)
+        const handleClose = ()=> setShow(false);
+        const handleShow = ()=> setShow(true);
+
+        function Confirm_delete(e){
+            e.preventDefault()
+            return(
+                <Modal show={show} onHide={handleClose}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Подтвердите удаление</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <div>Вы собираетесь удалить запись: </div>
+                        <div>ID: {item.id}</div>
+                        <div>Serial: {item.serial}</div>
+                        <div>Name: {item.name}</div>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={handleClose}>
+                            Выйти
+                        </Button>
+                        <Button variant="primary" onClick={deleteRow}>
+                            Подтвердить
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+            )
+        }
+        const deleteRow = async(event)=>{
             event.preventDefault();
             setParamsId(item.id);
-            let approve = window.confirm("Вы уверены что хотите удалить эту запись?")
-            if(approve){
-                await delete_row(ParamsId).then(response=>alert(response));
-            }
+            await delete_row(ParamsId).then(response=>alert(response));
         }
         const showPlanes = async(event)=>{
             try{
@@ -34,7 +60,7 @@ const DeletePlane = observer(()=>{
         useEffect(()=>{showPlanes()},[])
         return(
             <tr key={index}>
-                <td><button onClick={(e)=>{deleteRow(e,item)}}>Удалить запись</button></td>
+                <td><button onClick={(e)=>{Confirm_delete(e)}}>Удалить запись</button></td>
                 <td><img src={`http://localhost:7000/${item.filepath}`} style={{maxWidth:"300px"}} height="auto"/></td>
                 <td>{item.id}</td>
                 <td>{item.serial}</td>
@@ -55,7 +81,7 @@ const DeletePlane = observer(()=>{
     return(
         <div class="App3">
             <div class="container">
-                    <div className="table-like">
+                    <table>
                         <thead>
                             <tr>
                                 <th>Ничего</th>
@@ -80,7 +106,7 @@ const DeletePlane = observer(()=>{
                                 <ShowTR item = {item} index = {index}></ShowTR>
                             )}
                         </tbody>
-                    </div>
+                    </table>
             </div>
         </div>
     )
