@@ -1,0 +1,33 @@
+.App1{
+    width:80vw;
+    margin:0 auto;
+    min-height: 100vh;
+    display:flex;
+    flex-flow:row nowrap;
+    justify-content: center;
+    align-items: center;
+}
+table.show_planes{
+    display:block;
+    border:1px solid black;
+    border-collapse:collapse;
+    max-width:100vw;
+    width:100%;
+}
+table.show_planes th{
+    background-color: rgb(43, 77, 77);
+    border:1px solid black;
+}
+table.show_planes td{
+    border:1px solid black;
+    padding:20px 30px;
+}
+table.show_planes td.image{
+    padding:0;
+}
+.odd{
+    background-color: rgb(119, 119, 214);
+}
+.even{
+    background-color: rgb(226, 226, 226)smoke;
+}

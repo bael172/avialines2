@@ -1,0 +1,46 @@
+body{
+    color:white;
+}
+.App3{
+    min-height:100vh;
+}
+.show_planes{
+    max-width:80vw;
+}
+.container{
+    padding:2%;
+}
+table.show_planes tr>*{
+    padding-inline: 1em;
+    padding-block:0.2em;
+}
+.container>table{
+    border:2px white solid;
+}
+
+.table-like{
+    display:table;
+    width:10%;
+    border-collapse:collapse;
+    table-layout:initial;
+}
+.thead-like{
+    display:table-header-group;
+    background-color: rgb(67, 91, 97);
+    font-weight: 800;
+}
+.tbody-like{
+    display:table-row-group;
+}
+.tr-like{
+    display:table-row;
+}
+.tr-like>div{
+    display:table-cell;
+    padding: 4px 6px;
+    border:1px solid black;
+    text-align: center;
+}
+.caption{
+    display:table-cell;
+}
